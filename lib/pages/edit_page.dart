@@ -1,7 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:fl_sqlite_noted_app/data/datasources/local_datasource.dart';
+import 'package:fl_sqlite_noted_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
 
+import 'package:fl_sqlite_noted_app/data/models/note.dart';
+
 class EditPage extends StatefulWidget {
-  const EditPage({super.key});
+  const EditPage({
+    Key? key,
+    required this.note,
+  }) : super(key: key);
+
+  final Note note;
 
   @override
   State<EditPage> createState() => _EditPageState();
@@ -11,6 +21,13 @@ class _EditPageState extends State<EditPage> {
   final _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
   final contentController = TextEditingController();
+
+  @override
+  void initState() {
+    titleController.text = widget.note.title;
+    contentController.text = widget.note.content;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +64,7 @@ class _EditPageState extends State<EditPage> {
               height: 16.0,
             ),
             TextFormField(
-              controller: titleController,
+              controller: contentController,
               decoration: const InputDecoration(
                 labelText: 'Content',
                 border: OutlineInputBorder(),
@@ -63,13 +80,28 @@ class _EditPageState extends State<EditPage> {
             const SizedBox(
               height: 16.0,
             ),
-            FloatingActionButton(
-              onPressed: () {},
-              child: const Icon(
-                Icons.save,
-              ),
-            ),
           ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          if (_formKey.currentState!.validate()) {
+            Note note = Note(
+              title: widget.note.title,
+              content: widget.note.content,
+              createdAt: DateTime.now(),
+            );
+
+            LocalDataSource().updateNoteById(note);
+            Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          }
+        },
+        child: const Icon(
+          Icons.save,
+          size: 24.0,
         ),
       ),
     );
