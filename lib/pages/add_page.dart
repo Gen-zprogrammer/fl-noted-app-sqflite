@@ -26,6 +26,15 @@ class _AddPageState extends State<AddPage> {
         ),
         elevation: 2,
         backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_outlined,
+            color: Colors.white,
+          ),
+        ),
       ),
       body: Form(
         key: _formKey,
@@ -78,9 +87,9 @@ class _AddPageState extends State<AddPage> {
                   titleController.clear();
                   contentController.clear();
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
+                    SnackBar(
                       content: Text('Note berhasil ditambahkan'),
-                      backgroundColor: Colors.green,
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                   );
                   Navigator.pop(context);

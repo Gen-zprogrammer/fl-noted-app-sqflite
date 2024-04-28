@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:fl_sqlite_noted_app/data/datasources/local_datasource.dart';
 import 'package:fl_sqlite_noted_app/pages/home_page.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ class EditPage extends StatefulWidget {
     Key? key,
     required this.note,
   }) : super(key: key);
-
   final Note note;
 
   @override
@@ -35,17 +33,19 @@ class _EditPageState extends State<EditPage> {
       appBar: AppBar(
         title: const Text(
           'Edit Note',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
         elevation: 2,
         backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: const Icon(
+          Icons.arrow_back_outlined,
+          color: Colors.white,
+        ),
       ),
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           children: [
             TextFormField(
               controller: titleController,
@@ -61,7 +61,7 @@ class _EditPageState extends State<EditPage> {
               },
             ),
             const SizedBox(
-              height: 16.0,
+              height: 16,
             ),
             TextFormField(
               controller: contentController,
@@ -78,7 +78,7 @@ class _EditPageState extends State<EditPage> {
               },
             ),
             const SizedBox(
-              height: 16.0,
+              height: 16,
             ),
           ],
         ),
@@ -87,21 +87,25 @@ class _EditPageState extends State<EditPage> {
         onPressed: () {
           if (_formKey.currentState!.validate()) {
             Note note = Note(
-              title: widget.note.title,
-              content: widget.note.content,
+              id: widget.note.id,
+              title: titleController.text,
+              content: contentController.text,
               createdAt: DateTime.now(),
             );
-
             LocalDataSource().updateNoteById(note);
             Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => const HomePage()),
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const HomePage();
+                },
+              ),
             );
           }
         },
-        child: const Icon(
+        child: Icon(
           Icons.save,
-          size: 24.0,
+          color: Theme.of(context).colorScheme.primary,
         ),
       ),
     );
